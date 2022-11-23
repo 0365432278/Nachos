@@ -1,0 +1,72 @@
+- SC_Create:
+	// Input: Dia chi tu vung nho user cua ten file
+	// Output: -1 = Loi, 0 = Thanh cong
+	// Chuc nang: Tao ra file voi tham so la ten file
+
+	+ Đọc địa chỉ file từ thanh ghi 4
+	+ Chuyển con trỏ từ vùng nhớ user space tới vùng nhớ system space
+	+ Nếu không tạo được file, ghi -1  vào thanh ghi 2
+	+ Tạo file thành công, ghi 0 vào thanh ghi 2
+
+- SC_Open:
+	// Input: arg1: Dia chi cua chuoi name
+	// Output: Tra ve OpenFileID neu thanh cong, -1 neu loi
+	// Chuc nang: Tra ve ID cua file.
+
+Viết thêm hàm Open(char* fileName, int type) và cài đặt các biến liên quan vào lớp fileSystem
+
+	+ Lấy địa chỉ của tên file từ thanh ghi 4
+	+ Lấy phương thức mở file từ thanh ghi 5
+		type=0: đọc và ghi
+		type=1: chỉ đọc
+		type=2: nhập vào từ console (stdin)
+		type=3: xuất ra console (stdout)
+	+ Chuyển con trỏ từ vùng nhớ user space tới vùng nhớ system space
+	+ Xử lý mở file và ghi kết quả vào thanh ghi 2:
+		-1: không mở được file
+		0: xử lý stdin
+		1: xử lý stdout
+		n >= 2: địa chỉ ô nhớ còn trống
+- SC_Close:
+	//Input id cua file (OpenFileID)
+	// Output: 0: thanh cong, -1 that bai
+
+	+ Lấy id của file từ thanh ghi 4
+	+ Xử lý đóng file và ghi kết quả vào thanh ghi 2
+- SC_Read:
+	// Input: buffer(char*), so ky tu(int), id cua file(OpenFileID)
+	// Output: -1: Loi, So byte read thuc su: Thanh cong, -2: Thanh cong
+	// Cong dung: Doc file voi tham so la buffer, so ky tu cho phep va id cua file
+
+	+ Viết thêm hàm GetString(char *buffer, int size) vào lớp synchconsole, dùng để đọc chuỗi kí tự
+	Cài đặt:
+	+ Lấy địa chỉ của buffer từ thanh ghi số 4
+	+ Lấy số lượng kí tự từ thanh ghi số 5
+	+ Lấy id của file từ thanh ghi số 6
+	+ Kiểm tra tính hợp lệ của file. Ko hợp lệ -> ghi -1 vào thanh ghi 2
+	+ Xử lý đọc file với các trường hợp:
+		Đọc file từ stdin: dùng hàm GetString vừa được cài đặt trong lớp synchconsole để đọc chuỗi kí tự từ console
+		Đọc file bình thường: Dùng hàm Read trong lớp FileSystem để đọc file 
+		-> Ghi số byte thực sự đọc được vào thanh ghi 2
+	+ Đọc file rỗng: ghi -2 vào thanh ghi 2
+- SC_Write:
+	// Input: buffer(char*), so ky tu(int), id cua file(OpenFileID)
+	// Output: -1: Loi, So byte read thuc su: Thanh cong, -2: Thanh cong
+	// Cong dung: Doc file voi tham so la buffer, so ky tu cho phep va id cua file
+
+	+ Viết thêm hàm PutString(char *buffer, int size) vào lớp synchconsole, dùng để đọc chuỗi kí tự
+	Cài đặt:
+	+ Lấy địa chỉ của buffer từ thanh ghi số 4
+	+ Lấy số lượng kí tự từ thanh ghi số 5
+	+ Lấy id của file từ thanh ghi số 6
+	+ Kiểm tra tính hợp lệ của file. Ko hợp lệ -> ghi -1 vào thanh ghi 2
+	+ Xử lý đọc file với các trường hợp:
+		Ghi file stdout: dùng hàm PutString vừa được cài đặt trong lớp synchconsole để ghi chuỗi kí tự lên console
+		Đọc file bình thường: Dùng hàm Write trong lớp FileSystem để ghi file 
+		-> Ghi số byte thực sự đọc được vào thanh ghi 2
+	+ Đọc file rỗng: ghi -2 vào thanh ghi 2
+- SC_Seek:
+	// Input: Vi tri(int), id cua file(OpenFileID)
+	// Output: -1: Loi, Vi tri thuc su: Thanh cong
+	// Cong dung: Di chuyen con tro den vi tri thich hop trong file voi tham so
+			// la vi tri can chuyen va id cua file
